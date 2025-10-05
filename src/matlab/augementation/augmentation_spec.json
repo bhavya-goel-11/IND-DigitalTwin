@@ -1,0 +1,17 @@
+{
+  "type": "pothole_cluster",  
+  "id": "ph001",
+  "position": {
+    "road_id": "R1",
+    "station": 120.5
+  },
+  "dimensions": {
+    "length": 2.0,
+    "width": 1.2,
+    "depth": 0.15
+  },
+  "severity": "high",
+  "active_time_window": [0, 3600],
+  "tag_source": "manual_annotation",
+  "probability": 0.6
+}

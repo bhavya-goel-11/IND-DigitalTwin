@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ind-digitaltwin.schema.json",
+  "title": "Indian Urban Scenario Config",
+  "type": "object",
+  "required": ["id", "version", "region", "geometry", "trafficDemand"],
+  "properties": {
+    "id": {"type": "string"},
+    "version": {"type": "string", "default": "0.1.0"},
+    "description": {"type": "string"},
+    "region": {"type": "string", "description": "Geographic focus e.g. 'Delhi'"},
+    "geometry": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": {"enum": ["osm", "canonicalTemplate"]},
+        "osmFile": {"type": "string", "description": "Relative path to .osm if source=osm"},
+        "canonicalTemplate": {"type": "string", "description": "Name of canonical junction template if used"},
+        "boundingBox": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "[latMin, lonMin, latMax, lonMax]"}
+      }
+    },
+    "microFeatures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {"type": "string"},
+          "count": {"type": "integer", "minimum": 1},
+          "intensity": {"type": "number", "minimum": 0, "maximum": 1},
+          "placementRule": {"type": "string"}
+        }
+      },
+      "default": []
+    },
+    "behaviorProfiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "vehicleClass"],
+        "properties": {
+          "id": {"type": "string"},
+          "vehicleClass": {"enum": ["car", "twoWheeler", "threeWheeler", "bus", "truck", "erickshaw", "tram", "other"]},
+          "aggression": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.5},
+          "headwayFactor": {"type": "number", "default": 1.0},
+          "lateralDrift": {"type": "number", "default": 0.2},
+          "desiredSpeedMean": {"type": "number", "default": 12},
+          "desiredSpeedStd": {"type": "number", "default": 2}
+        }
+      },
+      "default": []
+    },
+    "trafficDemand": {
+      "type": "object",
+      "required": ["timeHorizon", "arrivalStreams"],
+      "properties": {
+        "timeHorizon": {"type": "number", "description": "Simulation duration seconds"},
+        "arrivalStreams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["entryId", "ratePerHour"],
+            "properties": {
+              "entryId": {"type": "string"},
+              "ratePerHour": {"type": "number"},
+              "vehicleClassMix": {
+                "type": "object",
+                "description": "Class => proportion",
+                "additionalProperties": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "variation": {
+      "type": "object",
+      "properties": {
+        "count": {"type": "integer", "default": 1},
+        "seed": {"type": "integer"}
+      },
+      "default": {"count": 1}
+    },
+    "export": {
+      "type": "object",
+      "properties": {
+        "matScenario": {"type": "boolean", "default": true},
+        "report": {"type": "boolean", "default": true}
+      },
+      "default": {"matScenario": true, "report": true}
+    }
+  }
+}

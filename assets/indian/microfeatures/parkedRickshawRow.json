@@ -1,0 +1,10 @@
+{
+  "id": "parkedRickshawRow",
+  "category": "staticVehicleSet",
+  "description": "Row of parked auto-rickshaws reducing effective shoulder width.",
+  "vehicleCountRange": [2,5],
+  "effectiveWidthMeters": 1.4,
+  "speedImpact": {"reductionMean": 1.5, "reductionStd": 0.5},
+  "occlusion": 0.1,
+  "persistence": "semiPermanent"
+}
