@@ -42,33 +42,139 @@ Implemented scaffold featuring:
 Repository Layout
 -----------------
 ```
-configs/                JSON schemas & example scenario configs
-assets/indian/          Micro-feature metadata definitions
-src/matlab/             Core MATLAB generation & helper scripts
-<!-- Removed: opentraffic/ directory -->
-data/osm/               OSM source files (sample)
-docs/hackathon/         Pitch, demo guide, metrics template
+├── configs/                    # JSON schemas & example scenario configs
+│   ├── examples/              # Ready-to-use configuration files
+│   └── schema.json           # Validation schema
+├── data/                      # Input data files
+│   └── osm/                  # OpenStreetMap data files
+├── src/                       # Source code
+│   ├── assets/               # Asset library (metadata & 3D models)
+│   └── matlab/               # Core MATLAB functions
+├── docs/                      # Documentation
+├── dist/                      # Generated outputs (reports, plots)
+└── run_ind_digitaltwin_demo.m # One-click demo script
 ```
 
-Quick Start
------------
-In MATLAB (R2025b+ with Automated Driving Toolbox):
+**📁 Key Directories:**
+- **[`configs/`](./configs/)**: Configuration files and schema
+- **[`data/osm/`](./data/osm/)**: Place your OSM files here  
+- **[`src/assets/`](./src/assets/)**: Indian micro-feature library
+- **[`src/matlab/`](./src/matlab/)**: Core generation functions
+
+## 🚀 Quick Start
+
+**Prerequisites**: MATLAB R2025b+ with Automated Driving Toolbox
+
+### Option 1: MATLAB Command Window
 ```matlab
-% One-click demo (from repo root) – now uses OSM based config by default:
+% From project root directory
 run_ind_digitaltwin_demo
 ```
 
-This will:
-- Add all required paths
-- Generate the OSM-based sample scenario (`delhi_osm_demo.json`)
-- Place micro-features (potholes, barricades, parked rickshaw rows)
-- Plot the scenario and feature overlays
-- Spawn multi-class traffic with behavior profiles
-- Display feature and vehicle metrics
-- Generate scenario variations
-- Package all reports and artifacts in `dist/`
+### Option 2: Windows PowerShell
+```powershell
+cd "C:\path\to\your\IND-DigitalTwin"
+matlab -batch "run_ind_digitaltwin_demo"
+```
 
-Artifacts appear under `dist/` (reports, feature plot, summary JSON).
+### Option 3: Your Own OSM Data
+```powershell
+# 1. Copy your OSM file
+copy "your_map.osm" "data\osm\your_map.osm"
+
+# 2. Update config file (edit configs/examples/delhi_osm_demo.json):
+#    "osmFile": "data/osm/your_map.osm"
+
+# 3. Run visualization  
+matlab -batch "addpath('src/matlab'); out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json'); plot(out.scenario); plotAppliedFeatures(out.scenario, out.features);"
+```
+
+**Result**: Interactive MATLAB figure showing your road network with Indian micro-features overlaid
+
+Both options will:
+- Generate road network from sample OSM data
+- Place Indian micro-features (potholes, barricades, parked vehicles)
+- **Plot interactive road network with overlaid features**
+- Spawn realistic multi-class traffic
+- Display comprehensive metrics
+- Save all outputs to [`dist/`](./dist/) directory
+
+## Using Your Own OSM Data
+
+### Step 1: Get OSM Data
+1. Go to [openstreetmap.org](https://www.openstreetmap.org)
+2. Navigate to your area of interest (keep it small - few hundred meters)
+3. Click **"Export"** → Select area → **"Export"** button
+4. Save the `.osm` file
+
+### Step 2: Place OSM File
+```powershell
+# Copy your OSM file to the data directory
+copy "your_area.osm" "data\osm\your_area.osm"
+```
+
+### Step 3: Update Configuration
+Edit [`configs/examples/delhi_osm_demo.json`](./configs/examples/delhi_osm_demo.json):
+```json
+{
+  "geometry": {
+    "source": "osm",
+    "osmFile": "data/osm/your_area.osm"
+  }
+}
+```
+
+### Step 4: Generate and Plot Your Scenario
+```matlab
+% In MATLAB
+addpath('src/matlab');
+out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
+
+% Plot road network
+plot(out.scenario);
+
+% Plot features overlaid on roads
+plotAppliedFeatures(out.scenario, out.features);
+```
+
+### Complete Command Sequence
+```powershell
+# Windows PowerShell - Complete workflow
+cd "C:\path\to\your\IND-DigitalTwin"
+copy "C:\path\to\your_map.osm" "data\osm\your_map.osm"
+matlab -batch "addpath('src/matlab'); out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json'); plot(out.scenario); plotAppliedFeatures(out.scenario, out.features);"
+```
+
+**Result**: Interactive MATLAB figure showing your road network with Indian micro-features (color-coded by type) overlaid at realistic positions.
+
+## Adding Features at Specific Coordinates
+
+### Quick Example: Place Pothole at Exact Location
+```matlab
+% Load scenario and place feature at coordinates (25.5, 10.2)
+addpath('src/matlab');
+out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
+feature = placeFeatureAtCoordinate(out.scenario, 'pothole', 25.5, 10.2);
+
+% Visualize
+plot(out.scenario); hold on;
+scatter(feature.featureCoords(:,1), feature.featureCoords(:,2), 120, 'r', 'filled');
+```
+
+### Interactive Coordinate Selection
+```matlab
+% Click on plot to select coordinates visually
+coords = selectCoordinatesInteractively(out.scenario);
+feature = placeFeatureAtCoordinate(out.scenario, 'pothole', coords(:,1), coords(:,2));
+```
+
+### Complete Demo
+```matlab
+% Run comprehensive coordinate placement demo
+demo_coordinate_placement
+```
+
+📋 **For detailed coordinate placement guide**: [`docs/COORDINATE_PLACEMENT_GUIDE.md`](./docs/COORDINATE_PLACEMENT_GUIDE.md)
 
 Config Anatomy (Excerpt)
 ------------------------
@@ -98,11 +204,15 @@ Config Anatomy (Excerpt)
 }
 ```
 
-Adding a New Micro-Feature
---------------------------
-1. Create JSON in `assets/indian/microfeatures/` (e.g. `waterPatch.json`).
-2. Reference it in config under `microFeatures` with a `placementRule`.
-3. Run `run_ind_digitaltwin_demo` again—no code modification required unless special logic needed.
+Available Micro-Features
+------------------------
+The toolkit includes comprehensive Indian urban micro-features:
+
+**Obstructions**: `pothole`, `barricadeCluster`, `parkedVehicleRow`, `parkedRickshawRow`
+**Infrastructure**: `streetVendorStall`, `temporaryMarket` 
+**Activity**: `peakHourEncroachment`, `cattleObstruction`
+
+Each feature has realistic placement rules, visual properties, and behavioral impact on traffic flow. See [`src/assets/README.md`](./src/assets/README.md) for complete feature descriptions.
 
 Architecture Overview
 ---------------------
@@ -207,49 +317,50 @@ Contact / Follow-Up
 -------------------
 For extending to production-grade ingestion, driver calibration, or NL integration, open an issue or outline a mini design in `docs/`.
 
-Using & Swapping an OSM File
-----------------------------
-The toolkit now includes a lightweight OSM importer (`buildScenarioFromOSM.m`) that:
-- Parses nodes and highway-tagged ways
-- Projects lat/lon to a local XY plane (equirectangular approximation)
-- Creates simple 2‑lane roads for each highway way
-- Returns OSM metadata as `out.osmMeta` (no direct modification of scenario object)
+## Troubleshooting OSM Data
 
-What it does NOT yet do:
-- Lane count inference / widths per classification
-- Junction synthesis or conflict zone extraction
-- Turn restrictions, speed limits, elevation
-- Oneway enforcement (data stored but not acted on)
+**"No nodes parsed" error:**
+- Check file is valid XML (not compressed .osm.pbf or .osm.bz2)
+- Ensure file contains `<node>` elements with `lat` and `lon` attributes
 
-To use a different OSM file:
-1. Place your file in `data/osm/` (e.g. `data/osm/my_area.osm`). Keep it geographically small (few hundred meters) for projection accuracy.
-2. Duplicate `configs/examples/delhi_osm_demo.json` and change only:
-	- `geometry.osmFile`
-	- (Optionally) micro-feature counts / placement rules
-	- (Optionally) arrival stream rates / class mix
-3. Run:
-	```matlab
-	run_ind_digitaltwin_demo  % (after updating the config path inside if needed)
-	```
-4. Or programmatically:
-	```matlab
-	out = generateScenarioFromConfig('configs/examples/my_area_osm.json');
-	plot(out.scenario); plotAppliedFeatures(out.scenario, out.features);
-	```
-5. Iterate by editing the JSON and re-running.
+**"Very skewed geometry":**
+- Area may be too large (keep geographic extent small - few hundred meters)
+- Try latitude span < 0.01 degrees for best projection accuracy
 
-Introspect OSM metadata:
-```matlab
-meta = out.osmMeta;
-disp(meta.roadCreatedCount);
-``` 
+**"Missing roads":**
+- OSM ways may lack `highway` tags or have insufficient nodes
+- Verify your area includes road network data (not just buildings)
 
-If roads look sparsely segmented: OSM ways may contain very few nodes; consider exporting with higher waypoint density or manually densifying.
+**Roads look sparse:**
+- OSM ways may have few intermediate nodes
+- Consider exporting with higher waypoint density from OSM
 
-Troubleshooting:
-- Error 'No nodes parsed': File may be compressed or truncated—ensure raw .osm XML.
-- Very skewed geometry: Large lat span (> ~0.01 deg) – switch to a proper projection (future enhancement).
-- Missing roads: Way lacked a <tag k="highway" ...> or had fewer than two valid nodes.
+For detailed OSM usage instructions, see [`data/osm/README.md`](./data/osm/README.md).
 
-Next OSM Enhancements (planned): lane count by classification, speed limits, oneway handling, junction graph extraction, centerline smoothing.
+## Documentation
+
+📚 **Complete Documentation:**
+- **[Configuration Guide](./configs/README.md)**: JSON schema and examples  
+- **[OSM Data Guide](./data/osm/README.md)**: Detailed OSM usage and troubleshooting
+- **[Asset Library](./src/assets/README.md)**: Feature definitions and 3D models
+- **[MATLAB Functions](./src/matlab/README.md)**: Complete API reference
+- **[Project Documentation](./docs/README.md)**: Additional guides and notes
+
+## System Requirements
+
+- **MATLAB R2025b** or later
+- **Automated Driving Toolbox**
+- **Windows/Mac/Linux** (commands shown for Windows)
+
+## License
+
+TBD (Choose a permissive license for the digital twin system.)
+
+## Credits
+
+Digital twin system with OSM-based road network import and realistic Indian urban feature placement.
+
+---
+
+**Next OSM Enhancements (planned)**: Lane count inference, speed limits, oneway handling, junction extraction, centerline smoothing.
 

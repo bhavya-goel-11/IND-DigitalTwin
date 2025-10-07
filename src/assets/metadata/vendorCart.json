@@ -1,0 +1,36 @@
+{
+  "name": "vendorCart",
+  "description": "Street vendor cart selling food or goods",
+  "category": "street_furniture",
+  "dimensions": {
+    "length": 2.0,
+    "width": 1.2,
+    "height": 1.4
+  },
+  "placement": {
+    "roadSnapDistance": 5.0,
+    "preferredLocation": "roadside",
+    "avoidIntersections": true,
+    "clustering": {
+      "enabled": true,
+      "minDistance": 3.0,
+      "maxClusterSize": 2,
+      "pattern": "scattered"
+    }
+  },
+  "visual": {
+    "color": [0.8, 0.4, 0.2],
+    "shape": "rectangle",
+    "markerSize": 90,
+    "markerSymbol": "h"
+  },
+  "behavior": {
+    "pedestrianAttractor": true,
+    "laneNarrowing": 0.2,
+    "speedReduction": 0.1
+  },
+  "model": {
+    "file": "vendor_cart.mat",
+    "type": "solid_mesh"
+  }
+}

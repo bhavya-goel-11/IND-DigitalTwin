@@ -1,0 +1,35 @@
+{
+  "name": "pothole",
+  "description": "Small road surface depression causing traffic disruption",
+  "category": "road_defect",
+  "dimensions": {
+    "length": 1.2,
+    "width": 0.8,
+    "depth": 0.15
+  },
+  "placement": {
+    "roadSnapDistance": 3.0,
+    "preferredLocation": "lane_center",
+    "avoidIntersections": true,
+    "clustering": {
+      "enabled": false,
+      "minDistance": 5.0,
+      "maxClusterSize": 1
+    }
+  },
+  "visual": {
+    "color": [0.3, 0.3, 0.3],
+    "shape": "ellipse",
+    "markerSize": 80,
+    "markerSymbol": "o"
+  },
+  "behavior": {
+    "speedReduction": 0.3,
+    "laneChangeProb": 0.4,
+    "discomfortRadius": 2.0
+  },
+  "model": {
+    "file": "pothole_depression.mat",
+    "type": "surface_mesh"
+  }
+}

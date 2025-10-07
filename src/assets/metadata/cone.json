@@ -1,0 +1,36 @@
+{
+  "name": "cone",
+  "description": "Traffic cone for temporary lane marking",
+  "category": "traffic_control",
+  "dimensions": {
+    "length": 0.4,
+    "width": 0.4,
+    "height": 0.7
+  },
+  "placement": {
+    "roadSnapDistance": 1.5,
+    "preferredLocation": "lane_boundary",
+    "avoidIntersections": false,
+    "clustering": {
+      "enabled": true,
+      "minDistance": 3.0,
+      "maxClusterSize": 8,
+      "pattern": "linear"
+    }
+  },
+  "visual": {
+    "color": [1.0, 0.6, 0.0],
+    "shape": "triangle",
+    "markerSize": 60,
+    "markerSymbol": "^"
+  },
+  "behavior": {
+    "laneGuidance": true,
+    "speedReduction": 0.1,
+    "safetyBuffer": 0.5
+  },
+  "model": {
+    "file": "cone_model.stl",
+    "type": "stl_mesh"
+  }
+}

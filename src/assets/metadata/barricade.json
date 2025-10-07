@@ -1,0 +1,35 @@
+{
+  "name": "barricade",
+  "description": "Single traffic barricade for lane control",
+  "category": "traffic_control",
+  "dimensions": {
+    "length": 1.5,
+    "width": 0.4,
+    "height": 1.0
+  },
+  "placement": {
+    "roadSnapDistance": 2.0,
+    "preferredLocation": "lane_edge",
+    "avoidIntersections": false,
+    "clustering": {
+      "enabled": false,
+      "minDistance": 2.0,
+      "maxClusterSize": 1
+    }
+  },
+  "visual": {
+    "color": [1.0, 0.4, 0.0],
+    "shape": "rectangle",
+    "markerSize": 80,
+    "markerSymbol": "s"
+  },
+  "behavior": {
+    "laneBlocking": false,
+    "speedReduction": 0.2,
+    "safetyBuffer": 1.0
+  },
+  "model": {
+    "file": "barricade_cuboid.mat",
+    "type": "solid_mesh"
+  }
+}
