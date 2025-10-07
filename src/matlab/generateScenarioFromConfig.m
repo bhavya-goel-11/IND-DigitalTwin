@@ -10,21 +10,22 @@ function out = generateScenarioFromConfig(configPath)
 
 cfg = loadConfig(configPath);
 
-% Step 2: geometry selection
-switch cfg.geometry.source
-    case 'canonicalTemplate'
-        [scenario, ego] = canonical_junction_generator(); %#ok<ASGLU>
-    case 'osm'
-        if ~isfield(cfg.geometry,'osmFile')
-            error('geometry.osmFile required when source=="osm"');
-        end
-        scenario = buildScenarioFromOSM(cfg.geometry.osmFile);
-    otherwise
-        error('Unknown geometry source: %s', cfg.geometry.source);
+% Step 2: geometry selection - OSM only
+if ~strcmp(cfg.geometry.source, 'osm')
+    error('Only OSM geometry source is supported. Use source: "osm"');
 end
+if ~isfield(cfg.geometry,'osmFile')
+    error('geometry.osmFile required when source=="osm"');
+end
+[scenario, osmMeta] = buildScenarioFromOSM(cfg.geometry.osmFile); %#ok<NASGU>
+% osmMeta will be attached to output struct later
 
 % Step 3: augmentation
-aug = augmentScenario(scenario, cfg);
+if exist('osmMeta','var')
+    aug = augmentScenario(scenario, cfg, osmMeta);
+else
+    aug = augmentScenario(scenario, cfg);
+end
 
 % Step 4: traffic spawning (multi-class placeholder)
 spawned = spawnTraffic(aug.scenario, cfg);
@@ -38,4 +39,7 @@ out.scenario = aug.scenario;
 out.spawnedActors = spawned;
 out.features = aug.appliedFeatures;
 out.notes = aug.notes;
+if exist('osmMeta','var')
+    out.osmMeta = osmMeta;
+end
 end

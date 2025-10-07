@@ -1,4 +1,4 @@
-function plotAppliedFeatures(scenario, features)
+function plotAppliedFeatures(scenario, features, varargin)
 % plotAppliedFeatures  Overlay feature markers on existing scenario plot.
 %   plotAppliedFeatures(scenario, out.features)
 % Assumes plot(scenario) already called or creates a new plot.
@@ -15,7 +15,24 @@ catch
 end
 hold on;
 
+% Parse optional args
+p = inputParser; p.KeepUnmatched = true;
+addParameter(p,'ShowCenters',true,@(x)islogical(x)||isnumeric(x));
+parse(p,varargin{:});
+showCenters = logical(p.Results.ShowCenters);
+
 colors = lines(numel(features));
+% Optionally overlay road centerlines (enhanced visibility)
+if showCenters
+    try
+        rs = scenario.RoadSegments; %#ok<PROPLC>
+        for r=1:numel(rs)
+            c = rs(r).RoadCenters; %#ok<PROP>
+            plot(c(:,1), c(:,2), '-', 'Color',[0.3 0.3 0.3], 'LineWidth',1.5);
+        end
+    catch
+    end
+end
 legendEntries = {};
 for i=1:numel(features)
     f = features(i);

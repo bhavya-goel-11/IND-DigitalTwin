@@ -13,9 +13,8 @@
       "type": "object",
       "required": ["source"],
       "properties": {
-        "source": {"enum": ["osm", "canonicalTemplate"]},
-        "osmFile": {"type": "string", "description": "Relative path to .osm if source=osm"},
-        "canonicalTemplate": {"type": "string", "description": "Name of canonical junction template if used"},
+        "source": {"enum": ["osm"]},
+        "osmFile": {"type": "string", "description": "Relative path to .osm file"},
         "boundingBox": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "[latMin, lonMin, latMax, lonMax]"}
       }
     },

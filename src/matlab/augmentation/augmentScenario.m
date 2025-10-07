@@ -1,4 +1,4 @@
-function out = augmentScenario(baseScenario, config)
+function out = augmentScenario(baseScenario, config, osmMeta)
 % augmentScenario  Apply Indian urban micro-features & behavior overlays.
 %   Iteration 2: geometry-aware heuristic placement.
 %   Steps:
@@ -17,6 +17,19 @@ out.notes = {};
 if ~isfield(config,'microFeatures') || isempty(config.microFeatures)
     out.notes{end+1} = 'No micro-features specified.'; %#ok<AGROW>
     return;
+end
+
+% Prepare road snapping data if osmMeta provided
+snapEnabled = (nargin >=3) && ~isempty(osmMeta) && isfield(osmMeta,'ways') && ~isempty(osmMeta.ways);
+allWayPts = [];
+if snapEnabled
+    for w = 1:numel(osmMeta.ways)
+        c2 = osmMeta.ways(w).centers;
+        if size(c2,2)==2
+            c2 = [c2 zeros(size(c2,1),1)];
+        end
+        allWayPts = [allWayPts; c2]; %#ok<AGROW>
+    end
 end
 
 % Collect road information
@@ -119,6 +132,16 @@ for k = 1:numel(config.microFeatures)
                     pos = allCenters(idx,1:3);
                 end
             end
+    end
+    % Optional snapping to nearest road centerline points (XY)
+    if snapEnabled && ~isempty(pos)
+        for si=1:size(pos,1)
+            diffs = allWayPts(:,1:2) - pos(si,1:2);
+            [~,mi] = min(sum(diffs.^2,2));
+            % Blend slightly toward road center to preserve some randomness
+            snapped = allWayPts(mi,1:2);
+            pos(si,1:2) = 0.7*snapped + 0.3*pos(si,1:2);
+        end
     end
     placed = struct('type',f.type,'rule',rule,'count',count,'positions',pos);
     if isempty(out.appliedFeatures)

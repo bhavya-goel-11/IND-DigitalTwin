@@ -1,15 +1,15 @@
-# Scenario Report: delhi_demo_v1
+# Scenario Report: delhi_osm_demo
 
 ## Feature Counts
-- pothole: 6
-- barricadeCluster: 1
+- pothole: 8
+- barricadeCluster: 2
 - parkedRickshawRow: 2
 
 ## Vehicle Classes
-- twoWheeler: 67
-- threeWheeler: 33
-- car: 76
+- car: 30
+- threeWheeler: 15
+- twoWheeler: 42
 
-Total Vehicles: 176
+Total Vehicles: 87
 \n## Notes
 - Placed 3 feature groups (heuristic).

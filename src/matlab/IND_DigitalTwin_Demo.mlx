@@ -1,4 +1,0 @@
-This is a MATLAB Live Script placeholder. Replace with actual demo steps:
-1. cfg = loadConfig('configs/examples/delhi_sample_canonical.json');
-2. out = generateScenarioFromConfig('configs/examples/delhi_sample_canonical.json');
-3. visualize scenario.

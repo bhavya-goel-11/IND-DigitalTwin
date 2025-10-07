@@ -1,0 +1,28 @@
+{
+  "id": "delhi_osm_demo",
+  "description": "Demo scenario generated from updated sample_map.osm with Indian micro-features and multi-class traffic.",
+  "geometry": {
+    "source": "osm",
+    "osmFile": "data/osm/sample_map.osm"
+  },
+  "microFeatures": [
+    { "type": "pothole", "count": 8, "placementRule": "nearStopLine" },
+    { "type": "barricadeCluster", "count": 2, "placementRule": "approachNorth" },
+    { "type": "parkedRickshawRow", "count": 2, "placementRule": "shoulderEast" }
+  ],
+  "behaviorProfiles": [
+    { "id": "car_default", "vehicleClass": "car", "aggression": 0.5 },
+    { "id": "twoWheeler_swarm", "vehicleClass": "twoWheeler", "aggression": 0.7 },
+    { "id": "threeWheeler_auto", "vehicleClass": "threeWheeler", "aggression": 0.55 }
+  ],
+  "trafficDemand": {
+    "timeHorizon": 300,
+    "arrivalStreams": [
+      { "entryId": "streamA", "ratePerHour": 700, "vehicleClassMix": { "car": 0.45, "twoWheeler": 0.4, "threeWheeler": 0.15 } },
+      { "entryId": "streamB", "ratePerHour": 500, "vehicleClassMix": { "car": 0.35, "twoWheeler": 0.5, "threeWheeler": 0.15 } }
+    ]
+  },
+  "variation": { "count": 2, "seed": 99 },
+  "export": { "matScenario": true, "report": true },
+  "notes": "Swap to any OSM by updating geometry.osmFile; adjust counts for calibration." 
+}
