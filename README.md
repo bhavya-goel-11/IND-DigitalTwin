@@ -1,17 +1,27 @@
-IND-DigitalTwin: Accelerated Indian Urban Junction Digital Twin Toolkit
-======================================================================
+IND-DigitalTwin: Interactive Indian Urban Junction Digital Twin Toolkit
+=====================================================================
 
-Hackathon Pitch (Concise)
-------------------------
-One-liner: Config + augmentation toolkit that injects Indian junction realism (potholes, barricades, informal lane usage, multi-class swarms) into MATLAB driving scenarios in minutes.
+## 🎯 **NEW: Interactive Feature Placement Demo**
+**Point, click, and place Indian micro-features anywhere on real OSM road networks!**
 
-Why it matters: Existing tools assume pristine geometry and disciplined behavior; this accelerates realistic scenario authoring for congestion & incident simulations.
+```matlab
+run_ind_digitaltwin_demo  % Interactive demo - click to place features
+```
+
+🖱️ **Click to place**: Potholes, barricades, vendors, parked vehicles  
+🎨 **Real-time visualization**: See features appear as you place them  
+💾 **Auto-save**: Complete scenarios saved with your custom feature layout  
+
+## Hackathon Pitch (Concise)
+One-liner: Interactive toolkit that lets you point-and-click to place Indian junction realism (potholes, barricades, informal lane usage) into MATLAB driving scenarios instantly.
+
+Why it matters: Existing tools assume pristine geometry and disciplined behavior; this provides **interactive visual placement** for realistic scenario authoring.
 
 Differentiators:
-- Declarative JSON intent → reproducible scenarios
-- Pluggable micro-feature asset library
-- Variation generation with seeding
-- Extensible behavior profiling
+- **Interactive coordinate selection** by clicking on maps
+- Real-time feature visualization and placement
+- 8 different Indian micro-feature types
+- Complete OSM-based road network integration
 
 See full pitch: `docs/hackathon/PITCH.md`
 
@@ -65,13 +75,29 @@ Repository Layout
 
 **Prerequisites**: MATLAB R2025b+ with Automated Driving Toolbox
 
-### Option 1: MATLAB Command Window
+### Option 1: Demo with Auto-Placement (Works Everywhere)
 ```matlab
-% From project root directory
+% From project root directory - Automatic demo
 run_ind_digitaltwin_demo
 ```
+**This will:**
+- 🗺️ Load and display your OSM road network  
+- 🤖 Auto-place 6 sample features (3 potholes, 2 barricades, 1 rickshaw area)
+- 🎨 Show final visualization with color-coded features
+- 💾 Save complete scenario to `dist/` directory
 
-### Option 2: Windows PowerShell
+### Option 2: Full Interactive Mode (MATLAB GUI Only)
+```matlab  
+% For full click-to-place interactivity
+run_interactive_feature_demo
+```
+**Interactive features:**
+- 🖱️ Click anywhere on map to place features
+- 📋 Choose from 8 different Indian micro-features  
+- 🔄 Multiple placement sessions
+- 🎨 Real-time updates as you place features
+
+### Option 2: Windows PowerShell  
 ```powershell
 cd "C:\path\to\your\IND-DigitalTwin"
 matlab -batch "run_ind_digitaltwin_demo"
@@ -91,13 +117,13 @@ matlab -batch "addpath('src/matlab'); out = generateScenarioFromConfig('configs/
 
 **Result**: Interactive MATLAB figure showing your road network with Indian micro-features overlaid
 
-Both options will:
-- Generate road network from sample OSM data
-- Place Indian micro-features (potholes, barricades, parked vehicles)
-- **Plot interactive road network with overlaid features**
-- Spawn realistic multi-class traffic
-- Display comprehensive metrics
-- Save all outputs to [`dist/`](./dist/) directory
+**The Interactive Demo Experience:**
+1. 🗺️ **OSM Map Display**: Your road network loads and displays clearly
+2. 🎯 **Feature Selection**: Choose from 8 Indian micro-features (potholes, barricades, vendors, etc.)
+3. 🖱️ **Point & Click Placement**: Click anywhere on the map to place features
+4. 🔄 **Multiple Sessions**: Add different feature types in multiple rounds
+5. 🎨 **Real-time Visualization**: See features appear immediately as you place them
+6. 💾 **Auto-Save**: Final scenario automatically saved to [`dist/`](./dist/) directory
 
 ## Using Your Own OSM Data
 
@@ -126,8 +152,8 @@ Edit [`configs/examples/delhi_osm_demo.json`](./configs/examples/delhi_osm_demo.
 
 ### Step 4: Generate and Plot Your Scenario
 ```matlab
-% In MATLAB
-addpath('src/matlab');
+% In MATLAB - Setup paths first
+setup_ind_digitaltwin_paths();
 out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
 
 % Plot road network
@@ -142,7 +168,7 @@ plotAppliedFeatures(out.scenario, out.features);
 # Windows PowerShell - Complete workflow
 cd "C:\path\to\your\IND-DigitalTwin"
 copy "C:\path\to\your_map.osm" "data\osm\your_map.osm"
-matlab -batch "addpath('src/matlab'); out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json'); plot(out.scenario); plotAppliedFeatures(out.scenario, out.features);"
+matlab -batch "setup_ind_digitaltwin_paths(); out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json'); plot(out.scenario); plotAppliedFeatures(out.scenario, out.features);"
 ```
 
 **Result**: Interactive MATLAB figure showing your road network with Indian micro-features (color-coded by type) overlaid at realistic positions.
@@ -152,7 +178,7 @@ matlab -batch "addpath('src/matlab'); out = generateScenarioFromConfig('configs/
 ### Quick Example: Place Pothole at Exact Location
 ```matlab
 % Load scenario and place feature at coordinates (25.5, 10.2)
-addpath('src/matlab');
+setup_ind_digitaltwin_paths();
 out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
 feature = placeFeatureAtCoordinate(out.scenario, 'pothole', 25.5, 10.2);
 
@@ -164,6 +190,8 @@ scatter(feature.featureCoords(:,1), feature.featureCoords(:,2), 120, 'r', 'fille
 ### Interactive Coordinate Selection
 ```matlab
 % Click on plot to select coordinates visually
+setup_ind_digitaltwin_paths();
+out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
 coords = selectCoordinatesInteractively(out.scenario);
 feature = placeFeatureAtCoordinate(out.scenario, 'pothole', coords(:,1), coords(:,2));
 ```
@@ -174,7 +202,9 @@ feature = placeFeatureAtCoordinate(out.scenario, 'pothole', coords(:,1), coords(
 demo_coordinate_placement
 ```
 
-📋 **For detailed coordinate placement guide**: [`docs/COORDINATE_PLACEMENT_GUIDE.md`](./docs/COORDINATE_PLACEMENT_GUIDE.md)
+📋 **Detailed Guides:**
+- **Interactive Demo**: [`INTERACTIVE_DEMO_GUIDE.md`](./INTERACTIVE_DEMO_GUIDE.md) - Complete walkthrough
+- **Coordinate Placement**: [`docs/COORDINATE_PLACEMENT_GUIDE.md`](./docs/COORDINATE_PLACEMENT_GUIDE.md) - Advanced methods
 
 Config Anatomy (Excerpt)
 ------------------------

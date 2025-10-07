@@ -1,0 +1,23 @@
+IND-DigitalTwin Interactive Feature Placement Report
+==================================================
+
+Generated: 07-Oct-2025 18:09:49
+OSM File: C:\Users\bhavy\OneDrive\Desktop\PROJECTS\IND-DigitalTwin\data\osm\sample_map.osm
+Total Roads: 151
+Total Features Placed: 3
+
+Feature Summary:
+- pothole: 1 instances
+- barricadeCluster: 1 instances
+- pothole: 1 instances
+
+Coordinate Details:
+
+pothole Coordinates:
+  472.23, 112.08
+
+barricadeCluster Coordinates:
+  -136.45, 181.42
+
+pothole Coordinates:
+  341.25, 123.64

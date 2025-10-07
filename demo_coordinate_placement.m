@@ -4,9 +4,9 @@
 
 clear; clc; close all;
 
-%% Step 1: Load Base Scenario
-fprintf('=== Loading OSM-based scenario ===\n');
-addpath('src/matlab');
+%% Step 1: Setup Paths and Load Base Scenario
+fprintf('=== Setting up paths and loading OSM-based scenario ===\n');
+setup_ind_digitaltwin_paths();
 out = generateScenarioFromConfig('configs/examples/delhi_osm_demo.json');
 baseScenario = out.scenario;
 

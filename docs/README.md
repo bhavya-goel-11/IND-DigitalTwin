@@ -4,8 +4,15 @@ This directory contains comprehensive documentation for the IND-DigitalTwin proj
 
 ## Files
 
+### [`USAGE_GUIDE.md`](./USAGE_GUIDE.md)
+Complete usage guide covering all running modes:
+- Automatic demo mode (works everywhere)
+- Interactive GUI mode (desktop only)
+- Direct programming mode (advanced)
+- Environment compatibility and troubleshooting
+
 ### [`sample_map_notes.md`](./sample_map_notes.md)
-Technical notes about the sample OSM data used in demonstrations:
+Technical notes about the sample OSM data used in demonstrations
 
 ### [`COORDINATE_PLACEMENT_GUIDE.md`](./COORDINATE_PLACEMENT_GUIDE.md)
 Comprehensive guide for placing features at exact coordinates:
